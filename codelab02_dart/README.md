@@ -1,5 +1,9 @@
 # Tugas Pemrograman Mobile - Codelab2
 
+## Soal 1
+**Penjelasan Kode**
+Program tersebut akan mencetak kalimat 'Nama Saya Nisa, Sekarang berumur ${i}', dengan perulangan dimulai dari i = 21, lalu setiap iterasi i berkurang 1 (i--) sampai i > 0 tidak lagi terpenuhi.
+
 ## Soal 2
 **Mengapa sangat penting untuk memahami bahasa pemrograman Dart sebelum kita menggunakan framework Flutter?**
 1. Flutter dibangun menggunakan Dart: Semua kode aplikasi Flutter ditulis dengan Dart. Jika tidak memahami dasar-dasar Dart, kita akan kesulitan menulis, membaca, dan memodifikasi kode Flutter.
@@ -44,8 +48,14 @@
     - Mendukung core library Dart (kecuali library VM seperti dart:io).
 
 ## Soal 4
-**RBuatlah penjelasan dan contoh eksekusi kode tentang perbedaan Null Safety dan Late variabel !**
+**Buatlah penjelasan dan contoh eksekusi kode tentang perbedaan Null Safety dan Late variabel !**
 1. Null Safety:
     Null Safety adalah fitur Dart yang memastikan variabel tidak bisa bernilai null secara tidak sengaja. Dengan Null Safety, variabel tanpa tanda tanya (?) tidak boleh bernilai null, sedangkan variabel dengan tanda tanya (?) diizinkan untuk bernilai null.
 2. Late Variable:
     Keyword late digunakan untuk mendeklarasikan variabel yang nilainya baru akan diinisialisasi nanti, tapi kita yakin akan diisi sebelum digunakan. Jika variabel late digunakan sebelum diinisialisasi, maka akan terjadi error.
+3. Penjelasan Kode:
+    - String nama = "Nisa"; → variabel nama wajib berisi nilai (tidak bisa null)
+    - String? panggilan; → tanda ? artinya variabel ini boleh berisi null. Karena itu panggilan = null; tidak menimbulkan error
+    - late String name; → variabel name dideklarasikan dengan late, artinya nilainya bisa diberikan nanti sebelum digunakan. Jika sudah diisi (name = "Selamat pagi!"), maka bisa dicetak tanpa masalah.
+    - late String status; → jika variabel late dipakai tanpa pernah diinisialisasi, maka akan menyebabkan error saat dijalankan.
+
