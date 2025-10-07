@@ -236,3 +236,979 @@ Pada langkah terakhir ini, atur semua elemen dalam ListView, bukan Column, karen
 Hasil:
 
 ![Langkah](./img/praktikum4/hasil.png)
+
+---
+
+# Tugas Praktikum 1
+## Membuat Project Baru : basic_layout_flutter
+![Langkah](./img/tugas1/buatproject.png)
+
+## Tata Letak Widget
+
+### Aplikasi Standard
+Kode `main.dart`
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(color: Colors.white),
+      child: const Center(
+        child: Text(
+          'Hello World',
+          textDirection: TextDirection.ltr,
+          style: TextStyle(fontSize: 32, color: Colors.black87),
+        ),
+      ),
+    );
+  }
+}
+```
+Hasil:
+![Langkah](./img/tugas1/helloworld.png)
+
+
+### Aplikasi Material
+Kode `main.dart`
+```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    const String appTitle = 'Flutter layout demo';
+    return MaterialApp(
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(title: const Text(appTitle)),
+        body: const Center(
+          child: Text('Hello World'),
+        ),
+      ),
+    );
+  }
+}
+```
+Hasil:
+![Langkah](./img/tugas1/helloworld2.png)
+
+
+### Aplikasi Cupertino
+Kode `main.dart`
+```dart
+import 'package:flutter/cupertino.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const CupertinoApp(
+      title: 'Flutter layout demo',
+      theme: CupertinoThemeData(
+        brightness: Brightness.light,
+        primaryColor: CupertinoColors.systemBlue,
+      ),
+      home: CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          backgroundColor: CupertinoColors.systemGrey,
+          middle: Text('Flutter layout demo'),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text('Hello World')],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+Hasil:
+![Langkah](./img/tugas1/helloworld3.png)
+
+
+## Tata Beberapa Widget Secara Vertikal dan Horizontal
+### Menyelaraskan Widget
+Dengan menggunakan `MainAxisAlligment` dan `CrossAxisAlligment`, sehingga kode pada `main.dart`:
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter layout demo',
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Flutter layout demo')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, // vertikal
+            crossAxisAlignment: CrossAxisAlignment.center, // horizontal
+            children: const [
+              Text('Top'), 
+              Text('Middle'), 
+              Text('Bottom')
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+Hasil:
+![Langkah](./img/tugas1/widget1.png)
+
+
+### Ukuran Widget
+Menentukan ukuran widget dengan container, sehingga pada `main.dart`:
+```dart
+body: Center(
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Container(
+        color: Colors.red,
+        padding: const EdgeInsets.all(10),
+        child: const Text('Red Box'),
+      ),
+      Container(
+        color: Colors.green,
+        padding: const EdgeInsets.all(20),
+        child: const Text('Green Box'),
+      ),
+      Container(
+        color: Colors.blue,
+        padding: const EdgeInsets.all(30),
+        child: const Text('Blue Box'),
+      ),
+    ],
+  ),
+),
+```
+Hasil:
+![Langkah](./img/tugas1/widget2.png)
+
+### Mengemas Widget
+Mengemas widget dalam row dan kolom, sehingga:
+```dart
+body: Center(
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: const [
+          Icon(Icons.star, color: Colors.orange),
+          Icon(Icons.star, color: Colors.orange),
+          Icon(Icons.star, color: Colors.orange),
+        ],
+      ),
+      const SizedBox(height: 20),
+      const Text('3 Stars!'),
+    ],
+  ),
+),
+```
+Hasil:
+![Langkah](./img/tugas1/widget3.png)
+
+### Menyusun Bais dan Kolom
+Menyusun layout pavlova
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter layout demo',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Flutter layout demo'),
+        ),
+        body: Center(
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(0, 40, 0, 30),
+            height: 600,
+            child: Card(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(width: 440, child: leftColumn),
+                  mainImage,
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final mainImage = Image.asset(
+  'assets/images/pavlova.png', // letakkan gambar di folder images/
+  fit: BoxFit.cover,
+);
+
+final titleText = const Text(
+  'Strawberry Pavlova',
+  style: TextStyle(
+    fontWeight: FontWeight.w800,
+    letterSpacing: 0.5,
+    fontSize: 30,
+  ),
+);
+
+final subTitle = const Text(
+  'Pavlova is a meringue-based dessert named after the Russian ballerina Anna Pavlova. '
+  'Pavlova features a crisp crust and soft, light inside, topped with fruit and whipped cream.',
+  textAlign: TextAlign.center,
+  style: TextStyle(fontSize: 18),
+);
+
+final stars = Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    Icon(Icons.star, color: Colors.green[500]),
+    Icon(Icons.star, color: Colors.green[500]),
+    Icon(Icons.star, color: Colors.green[500]),
+    const Icon(Icons.star, color: Colors.black),
+    const Icon(Icons.star, color: Colors.black),
+  ],
+);
+
+final ratings = Container(
+  padding: const EdgeInsets.all(20),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      stars,
+      const Text(
+        '170 Reviews',
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.w800,
+          fontFamily: 'Roboto',
+          letterSpacing: 0.5,
+          fontSize: 20,
+        ),
+      ),
+    ],
+  ),
+);
+
+const descTextStyle = TextStyle(
+  color: Colors.black,
+  fontWeight: FontWeight.w800,
+  fontFamily: 'Roboto',
+  letterSpacing: 0.5,
+  fontSize: 18,
+  height: 2,
+);
+
+final iconList = DefaultTextStyle.merge(
+  style: descTextStyle,
+  child: Container(
+    padding: const EdgeInsets.all(20),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Column(
+          children: [
+            Icon(Icons.kitchen, color: Colors.green[500]),
+            const Text('PREP:'),
+            const Text('25 min'),
+          ],
+        ),
+        Column(
+          children: [
+            Icon(Icons.timer, color: Colors.green[500]),
+            const Text('COOK:'),
+            const Text('1 hr'),
+          ],
+        ),
+        Column(
+          children: [
+            Icon(Icons.restaurant, color: Colors.green[500]),
+            const Text('FEEDS:'),
+            const Text('4-6'),
+          ],
+        ),
+      ],
+    ),
+  ),
+);
+
+final leftColumn = Container(
+  padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [titleText, subTitle, ratings, iconList],
+  ),
+);
+```
+
+Lokasi image:
+![Langkah](./img/tugas1/imagepavlova.png)
+
+pubspec.yaml
+![Langkah](./img/tugas1/yaml.png)
+
+Hasil:
+![Langkah](./img/tugas1/pavlova.png)
+
+Menggunakan refactoring agar main.dart lebih efesien
+![Langkah](./img/tugas1/refactoring.png)
+main.dart:
+```dart
+import 'package:flutter/material.dart';
+import 'pavlova_page.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Flutter Layout Demo',
+      home: PavlovaPage(),
+    );
+  }
+}
+```
+
+## Common Layouts Widget
+### Container
+file `lib/container/main.dart`
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Widget Tata Letak: Container')),
+        body: SingleChildScrollView(
+          // agar bisa di-scroll
+          child: Center(child: _buildImageColumn()),
+        ),
+      ),
+    );
+  }
+}
+
+Widget _buildImageColumn() {
+  return Container(
+    padding: const EdgeInsets.all(8),
+    decoration: const BoxDecoration(color: Colors.black12),
+    child: Column(children: [_buildImageRow(1), _buildImageRow(3)]),
+  );
+}
+
+Widget _buildImageRow(int imageIndex) => Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    _buildDecoratedImage(imageIndex),
+    _buildDecoratedImage(imageIndex + 1),
+  ],
+);
+
+Widget _buildDecoratedImage(int imageIndex) => Flexible(
+  child: Container(
+    width: 150, // ukuran gambar diseragamkan
+    height: 150,
+    decoration: BoxDecoration(
+      border: Border.all(width: 5, color: Colors.black38),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+    ),
+    margin: const EdgeInsets.all(8),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Image.asset(
+        'assets/images/pic$imageIndex.png',
+        fit: BoxFit.cover, // agar gambar tidak melar
+      ),
+    ),
+  ),
+);
+```
+Asset:
+![Langkah](./img/tugas1/assetContainer.png)
+
+Hasil:
+![Langkah](./img/tugas1/wadah.png)
+
+
+### Grid View
+file `lib/grid/main.dart`
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Widget Tata Letak: GridView')),
+        body: _buildGrid(),
+      ),
+    );
+  }
+}
+
+Widget _buildGrid() => GridView.extent(
+  maxCrossAxisExtent: 150,
+  padding: const EdgeInsets.all(4),
+  mainAxisSpacing: 4,
+  crossAxisSpacing: 4,
+  children: _buildGridTileList(8),
+);
+
+List<Widget> _buildGridTileList(int count) =>
+    List.generate(count, (i) => Image.asset('assets/images/pic${i+1}.png'));
+
+```
+
+Hasil:
+![Langkah](./img/tugas1/gridview.png)
+Grid berisi 3 kolom (bergantung ukuran layar) yang bisa digulir.
+
+### List View
+kode pada `lib/listView/main.dart`
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Widget Tata Letak: ListView')),
+        body: _buildList(),
+      ),
+    );
+  }
+}
+
+Widget _buildList() {
+  return ListView(
+    children: [
+      _tile('CineArts at the Empire', '85 W Portal Ave', Icons.theaters),
+      _tile('The Castro Theater', '429 Castro St', Icons.theaters),
+      _tile('Alamo Drafthouse Cinema', '2550 Mission St', Icons.theaters),
+      _tile('Roxie Theater', '3117 16th St', Icons.theaters),
+      _tile('AMC Metreon 16', '135 4th St #3000', Icons.theaters),
+      const Divider(),
+      _tile('K\'s Kitchen', '757 Monterey Blvd', Icons.restaurant),
+      _tile('Emmy\'s Restaurant', '1923 Ocean Ave', Icons.restaurant),
+      _tile('Chaiya Thai Restaurant', '272 Claremont Blvd', Icons.restaurant),
+      _tile('La Ciccia', '291 30th St', Icons.restaurant),
+    ],
+  );
+}
+
+ListTile _tile(String title, String subtitle, IconData icon) {
+  return ListTile(
+    title: Text(
+      title,
+      style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+    ),
+    subtitle: Text(subtitle),
+    leading: Icon(icon, color: Colors.blue[500]),
+  );
+}
+```
+Hasil:
+![Langkah](./img/tugas1/listView.png)
+daftar bioskop & restoran dengan ikon dan pemisah.
+
+### Stack
+Kode pada `lib/stack/main.dart`
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Widget Tata Letak: Stack')),
+        body: Center(child: _buildStack()),
+      ),
+    );
+  }
+}
+
+Widget _buildStack() {
+  return Stack(
+    alignment: const Alignment(0.6, 0.6),
+    children: [
+      const CircleAvatar(
+        backgroundImage: AssetImage('assets/images/pic1.png'),
+        radius: 100,
+      ),
+      Container(
+        decoration: const BoxDecoration(color: Colors.black45),
+        child: const Text(
+          'Kucing Meong Lucu',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+```
+
+Hasil: 
+![Langkah](./img/tugas1/stack.png)
+
+### Card
+Kode pada `lib/card/main.dart`
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Widget Tata Letak: Card')),
+        body: Center(child: _buildCard()),
+      ),
+    );
+  }
+}
+
+Widget _buildCard() {
+  return SizedBox(
+    height: 340, // diperbesar sedikit agar muat gambar
+    width: 300,
+    child: Card(
+      elevation: 8,
+      clipBehavior: Clip.antiAlias, //agar gambar ikut terpotong sesuai border card
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Tambahkan gambar di bagian atas card
+          Image.asset(
+            'assets/images/street.png',
+            height: 140,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+          const ListTile(
+            title: Text(
+              '1625 Main Street',
+              style: TextStyle(fontWeight: FontWeight.w500),
+            ),
+            subtitle: Text('My City, CA 99984'),
+            leading: Icon(Icons.restaurant_menu, color: Colors.blue),
+          ),
+          const Divider(),
+          const ListTile(
+            title: Text(
+              '(408) 555-1212',
+              style: TextStyle(fontWeight: FontWeight.w500),
+            ),
+            leading: Icon(Icons.contact_phone, color: Colors.blue),
+          ),
+          const ListTile(
+            title: Text('costa@example.com'),
+            leading: Icon(Icons.contact_mail, color: Colors.blue),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+```
+Hasil:
+![Langkah](./img/tugas1/stack.png)
+
+### List Title
+Kode pada `lib/listTitle/main.dart`
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Widget Tata Letak: ListTile')),
+        body: ListView(
+          children: const [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/pic1.png'),
+              ),
+              title: Text('Mia B'),
+              subtitle: Text('Flutter Developer'),
+              trailing: Icon(Icons.favorite, color: Colors.red),
+            ),
+            Divider(),
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/pic2.png'),
+              ),
+              title: Text('Liam P'),
+              subtitle: Text('UI Designer'),
+              trailing: Icon(Icons.star, color: Colors.amber),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+Hasil:
+![Langkah](./img/tugas1/listTitle.png)
+
+## Hasil Demo
+`main.dart`
+```dart
+import 'package:flutter/material.dart';
+import 'screens/cat_gallery_screen.dart';
+
+void main() {
+  runApp(const CatGalleryApp());
+}
+
+class CatGalleryApp extends StatelessWidget {
+  const CatGalleryApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Khoirotun Nisa - Cat Gallery',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        scaffoldBackgroundColor: Colors.grey[100],
+      ),
+      home: const CatGalleryScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+```
+
+Kode pada `lib/screens/cat_gallery_screen.dart`
+```dart
+import 'package:flutter/material.dart';
+
+class CatGalleryScreen extends StatelessWidget {
+  const CatGalleryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final catImages = List.generate(8, (i) => 'assets/images/pic${i + 1}.png');
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Khoirotun Nisa Cat Gallery 🐾'),
+        centerTitle: true,
+        backgroundColor: Colors.purple,
+      ),
+      body: ListView(
+        children: [
+          // STACK: Header bergambar
+          Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Image.asset('assets/images/pic1.png', fit: BoxFit.cover, height: 220, width: double.infinity),
+              Container(
+                width: double.infinity,
+                color: Colors.black54,
+                padding: const EdgeInsets.all(16),
+                child: const Text(
+                  'Welcome to Nisa’s Cat World',
+                  style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+
+          // CONTAINER: Deskripsi
+          Container(
+            padding: const EdgeInsets.all(16),
+            color: Colors.white,
+            child: const Text(
+              'Kucing adalah sahabat manusia yang lucu, lembut, dan penuh kasih. '
+              'Di galeri ini, kamu bisa melihat beberapa momen menggemaskan dari para kucing kesayangan Nisa 🐾',
+              style: TextStyle(fontSize: 16, height: 1.5),
+              textAlign: TextAlign.justify,
+            ),
+          ),
+
+          // GRIDVIEW: Koleksi gambar kucing
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: GridView.extent(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              maxCrossAxisExtent: 150,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              children: catImages.map((path) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.purple.shade100, width: 3),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(path, fit: BoxFit.cover),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+
+          // CARD + LISTTILE: Info kontak
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: Column(
+                children: const [
+                  ListTile(
+                    leading: Icon(Icons.pets, color: Colors.purple),
+                    title: Text('Khoirotun Nisa'),
+                    subtitle: Text('Cat Lover & Photographer'),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.email, color: Colors.purple),
+                    title: Text('nisa.catlover@example.com'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.phone, color: Colors.purple),
+                    title: Text('+62 812-3456-7890'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // FOOTER kecil
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(
+              child: Text(
+                '© 2025 Khoirotun Nisa 🐾 All cats are loved.',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+```
+![Langkah](./img/tugas1/demo.gif)
+
+---
+
+# Praktikum 5: Membangun Navigasi dan Rute
+## Langkah 1: Siapkan Project Baru
+![Langkah](./img/praktikum5/langkah1.png)
+
+## Langkah 2: Mendefinisikan Route
+Routes:
+![Langkah](./img/praktikum5/langkah2.png)
+
+Kode pada home_page.dart
+```dart
+import 'package:flutter/material.dart';
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
+  }
+}
+```
+
+Kode pada item_page.dart
+```dart
+import 'package:flutter/material.dart';
+
+class ItemPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
+  }
+}
+```
+
+## Langkah 3: Kode pada `main.dart`
+```dart
+import 'package:belanja/pages/home_page.dart';
+import 'package:belanja/pages/item_page.dart';
+import 'package:flutter/material.dart';
+
+
+void main() {
+  runApp(MaterialApp(
+    initialRoute: '/',
+    routes: {
+      '/': (context) => HomePage(),
+      '/item': (context) => ItemPage(),
+    },
+  ));
+}
+```
+
+## Langkah 4: Membuat data Model
+Kode pada `lib/models/item.dart`
+```dart
+ class Item {
+  String name;
+  int price;
+
+  Item({required this.name, required this.price});
+ }
+```
+
+## Langkah 5: Class HomePage
+```dart
+import 'package:flutter/material.dart';
+import 'package:belanja/models/item.dart';
+
+class HomePage extends StatelessWidget {
+  final List<Item> items = [
+    Item(name: 'Sugar', price: 5000),
+    Item(name: 'Salt', price: 2000),
+  ];
+  @override
+  Widget build(BuildContext conctext) {
+    throw UnimplementedError();
+  }
+}
+```
+
+## Langkah 6: Membuat ListView dan itemBuilder
+```dart
+import 'package:flutter/material.dart';
+import 'package:belanja/models/item.dart';
+
+class HomePage extends StatelessWidget {
+  final List<Item> items = [
+    Item(name: 'Sugar', price: 5000),
+    Item(name: 'Salt', price: 2000),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text('Khoirotun Nisa - 2341720057'),
+      ),
+      body: Container(
+        margin: EdgeInsets.all(8),
+        child: ListView.builder(
+          padding: EdgeInsets.all(8),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final item = items[index];
+            return Card(
+              child: Container(
+                margin: EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    Expanded(child: Text(item.name)),
+                    Expanded(
+                      child: Text(
+                        item.price.toString(),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+Hasil:
+![Langkah](./img/praktikum5/langkah6.png)
+
+## Langkah 7: Menambahkan aksi pada ListView
+```dart
+return InkWell(
+  onTap: () {
+    Navigator.pushNamed(context, '/item', arguments: item);
+  },
+```
+
+Hasil
+![Langkah](./img/praktikum5/hasil.gif)
+Sudah bisa diklik walaupun hasilnya unimplemented/error karena item_page belum diisi
+
+
+---
+
+# Tugas Praktikum 2
