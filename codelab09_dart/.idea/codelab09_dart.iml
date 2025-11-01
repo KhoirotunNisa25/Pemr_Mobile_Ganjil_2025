@@ -6,6 +6,12 @@
       <excludeFolder url="file://$MODULE_DIR$/src/kamera_flutter/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/src/kamera_flutter/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/src/kamera_flutter/build" />
+      <excludeFolder url="file://$MODULE_DIR$/src/photo_filter_carousel/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/src/photo_filter_carousel/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/src/photo_filter_carousel/build" />
+      <excludeFolder url="file://$MODULE_DIR$/src/tugas_photo_filter/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/src/tugas_photo_filter/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/src/tugas_photo_filter/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
