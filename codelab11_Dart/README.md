@@ -132,3 +132,83 @@ ElevatedButton(
 
 2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 3".
 ![Langkah](./img/1.gif)
+
+---
+
+# Praktikum 2: Menggunakan await/async untuk menghindari callbacks
+## langkah 1-3: Tambahkan method baru di `_FuturePageState`
+
+```dart
+class _FuturePageState extends State<FuturePage> {
+  String result = '';
+  Future<Response> getData() async {
+    const authority = 'www.googleapis.com';
+    const path = '/books/v1/volumes/B1mxDwAAQBAJ';
+    Uri url = Uri.https(authority, path);
+    return http.get(url);
+  }
+
+  Future<int> returnOneAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 1;
+  }
+
+  Future<int> returnTwoAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 2;
+  }
+
+  Future<int> returnThreeAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 3;
+  }
+
+  Future count() async {
+    int total = 0;
+    total = await returnOneAsync();
+    total += await returnTwoAsync();
+    total += await returnThreeAsync();
+    setState(() {
+      result = total.toString();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Back from the Future')),
+      body: Center(
+        child: Column(
+          children: [
+            const Spacer(),
+            ElevatedButton(
+              child: const Text('GO!'),
+              onPressed: () {
+                count(); // memanggil fungsi asynchronous
+              },
+            ),
+
+            const Spacer(),
+            Text(result),
+            const Spacer(),
+            const CircularProgressIndicator(),
+            const Spacer(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+
+**Soal 4**
+1. Jelaskan maksud kode langkah 1 dan 2 tersebut!
+
+    Ketiga method returnOneAsync(), returnTwoAsync(), dan returnThreeAsync() adalah fungsi asynchronous yang masing-masing menunggu selama 3 detik sebelum mengembalikan nilai 1, 2, dan 3.
+    Fungsi count() menjalankan ketiga fungsi tersebut secara berurutan menggunakan await, sehingga total waktu tunda menjadi 9 detik. Setelah semua proses selesai, nilai total dijumlahkan dan ditampilkan ke layar melalui setState().
+    Kode ini memperlihatkan bagaimana penggunaan async/await membuat kode asynchronous lebih sederhana, mudah dibaca, dan tetap menunggu hasil tiap proses sebelum lanjut ke berikutnya.
+
+
+2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 4".
+![Langkah](./img/2.gif)
