@@ -339,3 +339,44 @@ Pada bagian onPressed(), kita menambahkan .catchError() untuk menampilkan pesan 
 
 ---
 
+# Praktikum 4: Memanggil Future secara paralel
+## Langkah 1-3: `main.dart`
+```dart
+...
+  void returnFG() {
+    FutureGroup<int> futureGroup = FutureGroup<int>();
+    futureGroup.add(returnOneAsync());
+    futureGroup.add(returnTwoAsync());
+    futureGroup.add(returnThreeAsync());
+    futureGroup.close();
+
+    futureGroup.future.then(((List<int> value) {
+      int total = 0;
+      for (var element in value) {
+        total += element;
+      }
+      setState(() {
+        result = total.toString();
+      });
+    }));
+  }
+
+  ...
+
+              ElevatedButton(
+              child: const Text('GO!'),
+              onPressed: () {
+                returnFG();
+              },
+            ),
+  ...
+```
+
+**Soal 7**
+1. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 7".
+![alt text](img/4.gif)
+hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
+
+
+
+
