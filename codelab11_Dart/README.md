@@ -453,3 +453,50 @@ void returnFG() {
 **Debug Console**
 ![alt text](img/5b.png)
 
+
+## Langkah 4: Tambah method handleError()
+```dart
+
+  Future handleError() async {
+    try {
+      await returnError();
+    } catch (error) {
+      setState(() {
+        result = error.toString();
+      });
+    } finally {
+      print('Complete');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Back from the Future')),
+      body: Center(
+        child: Column(
+          children: [
+            const Spacer(),
+            ElevatedButton(
+              child: const Text('GO!'),
+              onPressed: () {
+                handleError();
+              },
+            ),
+```
+
+**Soal 10**
+Panggil method handleError() tersebut di ElevatedButton, lalu run. Apa hasilnya? Jelaskan perbedaan kode langkah 1 dan 4!
+
+**Hasil**
+![alt text](img/5b.gif)
+
+**Debug Console**
+![alt text](img/5c.png)
+
+**Penjelasan**
+Kode pada langkah 1 menggunakan pola callback (`then()`, `catchError`(), `whenComplete()`), sedangkan langkah 4 menggunakan pola `async`/`await` dengan `try-catch-finally`.
+Hasilnya sama-sama menampilkan pesan error di UI dan teks “Complete” di console, namun pendekatan async/await (langkah 4) lebih mudah dibaca, ditulis, dan dikelola terutama untuk operasi asynchronous yang kompleks.
+
+---
+
