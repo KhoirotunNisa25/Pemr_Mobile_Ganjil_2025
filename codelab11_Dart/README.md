@@ -212,3 +212,66 @@ class _FuturePageState extends State<FuturePage> {
 
 2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 4".
 ![Langkah](./img/2.gif)
+
+
+---
+
+# Praktikum 3: Menggunakan Completer di Future
+## Langkah 1-3: `main.dart`
+```dart
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+
+...
+
+class _FuturePageState extends State<FuturePage> {
+  String result = '';
+
+...
+
+  late Completer completer;
+
+  Future getNumber() {
+    completer = Completer<int>();
+    calculate();
+    return completer.future;
+  }
+
+  Future calculate() async {
+    await Future.delayed(const Duration(seconds: 5));
+    completer.complete(42);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Back from the Future')),
+      body: Center(
+        child: Column(
+          children: [
+            const Spacer(),
+            ElevatedButton(
+              child: const Text('GO!'),
+              onPressed: () {
+                getNumber().then((value) {
+                  setState(() {
+                    result = value.toString();
+                  });
+                });
+              },
+            ),
+...
+```
+**Soal 5**
+1. Jelaskan maksud kode langkah 2 tersebut!
+
+    Pada langkah 2, digunakan class `Completer` untuk membuat `Future` yang dapat diselesaikan secara manual. Objek completer dibuat di dalam `getNumber()`, lalu dikembalikan sebagai `completer.future`.`Fungsi calculate()` mensimulasikan proses `asynchronous` dengan `Future.delayed()` selama 5 detik, kemudian memanggil `completer.complete(42)` untuk memberi nilai pada Future tersebut. Dengan kata lain, Completer memungkinkan kita menentukan kapan dan bagaimana Future dianggap “selesai”, bukan otomatis seperti pada async/await biasa. Setelah Future diselesaikan, then() akan dijalankan dan menampilkan nilai 42 di layar.
+
+2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 5".
+    ![alt text](img/3a.gif)
+
+
+
