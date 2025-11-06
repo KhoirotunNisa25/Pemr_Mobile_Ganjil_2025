@@ -408,3 +408,48 @@ void returnFG() {
 
     Hasil akhirnya sama-sama mengembalikan List hasil dari seluruh Future, namun `Future.wait` lebih sederhana dan efisien jika daftar Future sudah pasti.
 
+---
+
+# Praktikum 5: Menangani Respon Error pada Async Code
+## Langkah 1-3: `main.dart`
+```dart
+  Future returnError() async {
+    await Future.delayed(const Duration(seconds: 2));
+    throw Exception('Something terrible happened!');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Back from the Future')),
+      body: Center(
+        child: Column(
+          children: [
+            const Spacer(),
+            ElevatedButton(
+              child: const Text('GO!'),
+              onPressed: () {
+                returnError()
+                    .then((value) {
+                      setState(() {
+                        result = 'Success';
+                      });
+                    })
+                    .catchError((onError) {
+                      setState(() {
+                        result = onError.toString();
+                      });
+                    })
+                    .whenComplete(() => print('Complete'));
+              },
+            ),
+```
+
+
+**Soal 9**
+1. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 9".
+![alt text](img/5a.gif)
+
+**Debug Console**
+![alt text](img/5b.png)
+
