@@ -377,6 +377,34 @@ Pada bagian onPressed(), kita menambahkan .catchError() untuk menampilkan pesan 
 ![alt text](img/4.gif)
 hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
 
+## Langkah 4: `returnGf()`
+```dart
+void returnFG() {
+  // Ganti FutureGroup dengan Future.wait
+  final futures = Future.wait<int>([
+    returnOneAsync(),
+    returnTwoAsync(),
+    returnThreeAsync(),
+  ]);
 
+  futures.then(((List<int> value) {
+    int total = 0;
+    for (var element in value) {
+      total += element;
+    }
+    setState(() {
+      result = total.toString();
+    });
+  }));
+}
+```
 
+**Soal 8**
+1. Jelaskan maksud perbedaan kode langkah 1 dan 4!
+
+    `FutureGroup` digunakan untuk mengelola kumpulan Future secara dinamis — Future bisa ditambahkan satu per satu dan baru dijalankan setelah grup ditutup dengan `.close()`.
+    
+    Sementara `Future.wait` langsung menjalankan semua Future dalam sebuah list secara paralel tanpa perlu ditutup secara manual.
+
+    Hasil akhirnya sama-sama mengembalikan List hasil dari seluruh Future, namun `Future.wait` lebih sederhana dan efisien jika daftar Future sudah pasti.
 
