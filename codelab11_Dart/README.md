@@ -500,3 +500,110 @@ Hasilnya sama-sama menampilkan pesan error di UI dan teks “Complete” di cons
 
 ---
 
+# Praktikum 6: Menggunakan Future dengan StatefulWidget
+## Langkah 1: Install Plugin Geolocator
+![alt text](img/6-1.png)
+
+
+## Langkah 2: Tambah Permission GPS
+`android/app/src/main/androidmanifest.xml`
+```dart
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+```
+
+## Langkah 3-5: `lib/geolocation.dart`
+```dart
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
+  @override
+  State<LocationScreen> createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  String myPosition = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getPosition().then((Position myPos) {
+      myPosition =
+          'Latitude: ${myPos.latitude.toString()} - Longitude: ${myPos.longitude.toString()}';
+      setState(() {
+        myPosition = myPosition;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Current Location Nisa')),
+      body: Center(child: Text(myPosition)),
+    );
+  }
+
+  Future<Position> getPosition() async {
+    await Geolocator.requestPermission();
+    Position? position = await Geolocator.getCurrentPosition();
+    return position;
+  }
+}
+```
+
+**Soal 11** Panggilan : Nisa
+
+## Langkah 6: `main.dart`:
+```dart
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Future Demo by Nisa',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: LocationScreen(),
+    );
+  }
+```
+
+## Langkah 7: Hasil
+![alt text](img/6-2.png)
+
+## Langkah 8: Tambahkan animasi loading
+`lib/geolocation.dart`
+```dart
+  @override
+  Widget build(BuildContext context) {
+    final myWidget = myPosition == ''
+        ? const CircularProgressIndicator()
+        : Text(myPosition);
+
+    return Scaffold(
+      appBar: AppBar(title: Text('Current Location Nisa')),
+      body: Center(child: myWidget),
+    );
+  }
+
+  Future<Position> getPosition() async {
+    await Geolocator.requestPermission();
+    await Future.delayed(const Duration(seconds: 3));
+    Position? position = await Geolocator.getCurrentPosition();
+    return position;
+  }
+```
+
+**Soal 12**
+1. Jika Anda tidak melihat animasi loading tampil, kemungkinan itu berjalan sangat cepat. Tambahkan delay pada method getPosition() dengan kode await Future.delayed(const Duration(seconds: 3));
+2. Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
+    **Run di browser**
+    ![alt text](img/6a.gif)
+    Koordinat GPS dapat diperoleh di browser karena Flutter Web menggunakan API geolocation bawaan browser. Meski plugin Geolocator dibuat untuk Android/iOS, di Web ia tetap memanfaatkan navigator.geolocation sehingga lokasi bisa ditampilkan, meski akurasinya tergantung izin dan kemampuan browser.
+
+3. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 12".
+  ![alt text](img/6.gif)
+
