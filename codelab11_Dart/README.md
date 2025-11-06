@@ -806,3 +806,96 @@ class _NavigationSecondState extends State<NavigationSecond> {
     Setiap kali menekan tombol di NavigationSecond, warna background pada NavigationFirst berubah sesuai warna yang dipilih. Hal ini terjadi karena Navigator menunggu hasil dari Navigator.pop(context, color) menggunakan await, lalu setelah nilai dikembalikan (selectedColor), method setState() dipanggil untuk memperbarui UI. Pola ini memanfaatkan Future untuk komunikasi antar route secara asinkron.
 
 ![alt text](img/8.gif)
+
+---
+
+# Praktikum 9: Memanfaatkan async/await dengan Widget Dialog
+## Langkah 1-4: `lib/navigation_dialog.dart`
+```dart
+import 'package:flutter/material.dart';
+
+class NavigationDialogScreen extends StatefulWidget {
+  const NavigationDialogScreen({super.key});
+
+  @override
+  State<NavigationDialogScreen> createState() => _NavigationDialogScreenState();
+}
+
+class _NavigationDialogScreenState extends State<NavigationDialogScreen> {
+  Color color = Colors.blue.shade700;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: color,
+      appBar: AppBar(
+        title: const Text('Navigation Dialog Screen Nisa'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Change Color'),
+          onPressed: () {
+            _showColorDialog(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showColorDialog(BuildContext context) async {
+    final selectedColor = await showDialog<Color>(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('Very important question'),
+          content: const Text('Please choose a color'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Red'),
+              onPressed: () {
+                Navigator.pop(context, Colors.red.shade700);
+              },
+            ),
+            TextButton(
+              child: const Text('Green'),
+              onPressed: () {
+                Navigator.pop(context, Colors.green.shade700);
+              },
+            ),
+            TextButton(
+              child: const Text('Blue'),
+              onPressed: () {
+                Navigator.pop(context, Colors.blue.shade700);
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    if (selectedColor != null) {
+      setState(() {
+        color = selectedColor;
+      });
+    }
+  }
+}
+
+```
+
+## Langkah 5: `lib/main.dart`
+```dart
+      home: const NavigationDialogScreen(),
+```
+
+**Soal 17**
+
+Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
+
+Ketika salah satu button diklik, warna background `Scaffold` berubah sesuai warna yang dipilih. Hal ini terjadi karena:
+- Dialog (`AlertDialog`) menunggu input pengguna dengan `await showDialog`.
+- Setelah pengguna memilih warna, dialog menutup (Navigator.pop) dan mengembalikan nilai warna yang dipilih.
+- `setState` kemudian dipanggil untuk memperbarui color pada widget, sehingga UI menampilkan warna baru secara real-time.
+
+![alt text](img/9.gif)
