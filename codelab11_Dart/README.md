@@ -274,4 +274,68 @@ class _FuturePageState extends State<FuturePage> {
     ![alt text](img/3a.gif)
 
 
+## Langkah 5-6: `main.dart`
+```dart
+  calculate() async {
+    try {
+      await new Future.delayed(const Duration(seconds: 5));
+      completer.complete(42);
+
+      // throw Exception();
+    } catch (_) {
+      completer.completeError({});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Back from the Future')),
+      body: Center(
+        child: Column(
+          children: [
+            const Spacer(),
+            ElevatedButton(
+              child: const Text('GO!'),
+              onPressed: () {
+                getNumber()
+                    .then((value) {
+                      setState(() {
+                        result = value.toString();
+                      });
+                    })
+                    .catchError((e) {
+                      result = 'An error occurred';
+                      setState(() {});
+                    });
+              },
+            ),
+
+            const Spacer(),
+            Text(result),
+            const Spacer(),
+            const CircularProgressIndicator(),
+            const Spacer(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+**Soal 6**
+1. Jelaskan maksud perbedaan kode langkah 2 dengan langkah 5-6 tersebut!
+
+    Perbedaan utama terletak pada penanganan error (exception).
+Pada langkah 2, kode hanya menyelesaikan Completer dengan nilai sukses (completer.complete(42)), tanpa mempertimbangkan kemungkinan gagal. Jika terjadi error, Future tetap dianggap berhasil (meskipun logika salah).
+
+    Sedangkan pada langkah 5–6, ditambahkan try-catch agar ketika terjadi error, program tidak crash, tetapi menyelesaikan Future dengan status error (completer.completeError({})).
+Pada bagian onPressed(), kita menambahkan .catchError() untuk menampilkan pesan kesalahan di UI.
+
+    Dengan demikian, versi langkah 5–6 lebih aman dan robust, karena dapat menangani baik hasil sukses maupun error secara terpisah dan jelas.
+
+2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 6".
+    ![alt text](img/3b.gif)
+
+---
 
