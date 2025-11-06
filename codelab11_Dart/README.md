@@ -698,3 +698,111 @@ class _LocationScreenState extends State<LocationScreen> {
 2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 14".
     ![alt text](img/7b.gif)
 
+---
+
+# Praktikum 8: Navigation route dengan Future Function
+## Langkah 1-3: `lib/navigation_first.dart`
+```dart
+import 'package:books/navigation_second.dart';
+import 'package:flutter/material.dart';
+
+class NavigationFirst extends StatefulWidget {
+  const NavigationFirst({super.key});
+
+  @override
+  State<NavigationFirst> createState() => _NavigationFirstState();
+}
+
+class _NavigationFirstState extends State<NavigationFirst> {
+  Color color = Colors.blue.shade700;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: color,
+      appBar: AppBar(title: const Text('Navigation First Screen Nisa')),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Change Color'),
+          onPressed: () {
+            _navigateAndGetColor(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Future _navigateAndGetColor(BuildContext context) async {
+    color =
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NavigationSecond()),
+        ) ??
+        Colors.blue;
+    setState(() {});
+  }
+}
+```
+## langkah 4-5: `lib/navigation_second.dart`
+```dart
+import 'package:flutter/material.dart';
+
+class NavigationSecond extends StatefulWidget {
+  const NavigationSecond({super.key});
+
+  @override
+  State<NavigationSecond> createState() => _NavigationSecondState();
+}
+
+class _NavigationSecondState extends State<NavigationSecond> {
+  @override
+  Widget build(BuildContext context) {
+    Color color;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Navigation Second Screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              child: const Text('Red'),
+              onPressed: () {
+                color = Colors.red.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Green'),
+              onPressed: () {
+                color = Colors.green.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Blue'),
+              onPressed: () {
+                color = Colors.blue.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Langkah 6: `lib/main.dart`
+```dart
+      home: const NavigationFirst(),
+```
+
+**Soal 16**
+- Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ? 
+    
+    Setiap kali menekan tombol di NavigationSecond, warna background pada NavigationFirst berubah sesuai warna yang dipilih. Hal ini terjadi karena Navigator menunggu hasil dari Navigator.pop(context, color) menggunakan await, lalu setelah nilai dikembalikan (selectedColor), method setState() dipanggil untuk memperbarui UI. Pola ini memanfaatkan Future untuk komunikasi antar route secara asinkron.
+
+![alt text](img/8.gif)
