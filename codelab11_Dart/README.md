@@ -607,3 +607,94 @@ class _LocationScreenState extends State<LocationScreen> {
 3. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 12".
   ![alt text](img/6.gif)
 
+---
+
+# Praktikum 7: Manajemen Future dengan FutureBuilder
+## Langkah 1: `lib/geolocation.dart`
+```dart
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
+  @override
+  State<LocationScreen> createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  Future<Position>? position;
+  String myPosition = '';
+
+  @override
+  void initState() {
+    super.initState();
+    position = getPosition();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Current Location Nisa')),
+      body: Center(
+        child: FutureBuilder(
+          future: position,
+          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              return Text(snapshot.data.toString());
+            } else {
+              return const Text('');
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<Position> getPosition() async {
+    await Geolocator.isLocationServiceEnabled();
+    await Future.delayed(const Duration(seconds: 3));
+    Position position = await Geolocator.getCurrentPosition();
+    return position;
+  }
+}
+
+```
+
+**Soal 13**
+1. Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?
+    Perbedaan UI dengan praktikum sebelumnya terletak pada cara data ditampilkan. Sebelumnya menggunakan setState() untuk menunggu future selesai, sedangkan sekarang FutureBuilder secara otomatis membangun ulang widget ketika data tersedia. Akibatnya, animasi loading muncul hanya saat future berjalan, dan teks koordinat muncul langsung saat data diterima, tanpa perlu memanggil setState() secara manual.
+
+2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 13".
+    ![alt text](img/7a.gif)
+
+3. Seperti yang Anda lihat, menggunakan FutureBuilder lebih efisien, clean, dan reactive dengan Future bersama UI.
+
+## Langkah 5: Tambah Handling Error
+```dart
+        child: FutureBuilder(
+          future: position,
+          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return const Text('Something terrible happened!');
+              }
+              return Text(snapshot.data.toString());
+            } else {
+              return const Text('');
+            }
+          },
+        ),
+```
+
+**Soal 14**
+1. Apakah ada perbedaan UI dengan langkah sebelumnya? Mengapa demikian?
+    Perbedaan UI setelah menambahkan error handling adalah seharusnya ketika terjadi kesalahan, aplikasi menampilkan pesan 'Something terrible happened!' alih-alih kosong atau error default. UI lainnya tetap sama
+
+2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W11: Soal 14".
+    ![alt text](img/7b.gif)
+
