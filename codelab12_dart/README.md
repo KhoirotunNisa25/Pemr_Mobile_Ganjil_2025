@@ -586,3 +586,126 @@ class NumberStream {
 
 ---
 
+# Praktikum 7: BLoC Pattern
+**Project Baru**
+![alt text](img/7.png)
+
+`main.dart`
+```dart
+import 'package:flutter/material.dart';
+import 'random_screen.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const RandomScreen(),
+    );
+  }
+}
+```
+
+`random_bloc.dart`
+```dart
+import 'dart:async';
+import 'dart:math';
+
+class RandomNumberBloc {
+  // StreamController for input events
+  final _generateRandomController = StreamController<void>();
+  // StreamController for output
+  final _randomNumberController = StreamController<int>();
+  // Input Sink
+  Sink<void> get generateRandom => _generateRandomController.sink;
+  // Output Stream.
+  Stream<int> get randomNumber => _randomNumberController.stream;
+
+  RandomNumberBloc() {
+    _generateRandomController.stream.listen((_) {
+      final random = Random().nextInt(10);
+      _randomNumberController.sink.add(random);
+    });
+  }
+
+  void dispose() {
+    _generateRandomController.close();
+    _randomNumberController.close();
+  }
+}
+
+```
+
+`random_screen.dart`
+```dart
+import 'package:flutter/material.dart';
+import 'random_bloc.dart';
+
+class RandomScreen extends StatefulWidget {
+  const RandomScreen({Key? key}) : super(key: key);
+
+  @override
+  State<RandomScreen> createState() => _RandomScreenState();
+}
+
+class _RandomScreenState extends State<RandomScreen> {
+  final _bloc = RandomNumberBloc();
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Random Number Nisa')),
+      body: Center(
+        child: StreamBuilder<int>(
+          stream: _bloc.randomNumber,
+          initialData: 0,
+          builder: (context, snapshot) {
+            return Text(
+              'Random Number: ${snapshot.data}',
+              style: const TextStyle(fontSize: 24),
+            );
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _bloc.generateRandom.add(null),
+        child: const Icon(Icons.refresh),
+      ),
+    );
+  }
+}
+
+```
+
+**Hasil**
+![alt text](img/7.gif)
+
+**Soal 13**
+
+Praktikum ini intinya akan mengenalkan pola arsitektur BLoC (Business Logic Component) di Flutter, yaitu cara memisahkan logika aplikasi dari UI dengan memakai Stream, Sink, dan StreamController.
+
+Konsep BLoC terlihat jelas di file `random_bloc.dart`.
+Di sana logika bisnis berada di luar widget, yaitu:
+
+* Input event ditampung melalui sink (`generateRandom`)
+* Proses bisnis terjadi di dalam BLoC (menghasilkan angka acak)
+* Output dikirim melalui stream (`randomNumber`)
+* UI hanya mendengarkan stream tanpa tahu logikanya
+
+Widget `RandomScreen` tidak memproses angka, tidak membuat random number, tidak melakukan perhitungan, UI hanya menampilkan data dari BLoC. Sementara BLoC mengatur aliran data dan logikanya lewat StreamController.
+
