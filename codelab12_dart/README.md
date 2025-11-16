@@ -298,3 +298,50 @@ Hasil akhirnya: setiap tombol/aksi yang memanggil method ini akan mengirim error
 **Hasil**
 ![alt text](img/2-1.gif)
 
+---
+
+# Praktikum 3: Injeksi data ke streams
+`main.dart`
+```dart
+class _StreamHomePageState extends State<StreamHomePage> {
+...
+  late StreamTransformer transformer;
+
+...
+
+  @override
+  void initState() {
+    numberStream = NumberStream();
+    numberStreamController = numberStream.controller;
+    transformer = StreamTransformer<int, int>.fromHandlers(
+      handleData: (value, sink) {
+        sink.add(value * 10);
+      },
+      handleError: (error, trace, sink) {
+        sink.add(-1);
+      },
+      handleDone: (sink) => sink.close(),
+    );
+    Stream stream = numberStreamController.stream;
+    stream.transform(transformer).listen((event) {
+      setState(() {
+        lastNumber = event;
+      });
+    }).onError((error) {
+      setState(() {
+        lastNumber = -1;
+      });
+    });
+    super.initState();
+  }
+```
+
+**Soal 8**
+Langkah 1–3 menambahkan sebuah `StreamTransformer` sebagai perantara sebelum data stream sampai ke UI. Transformer ini mengubah setiap angka yang masuk menjadi *nilai × 10*, dan jika muncul error, transformer menggantinya dengan `-1` agar UI tetap menerima data yang aman. Setelah itu, stream dijalankan melalui transformer menggunakan `stream.transform(transformer)`, sehingga listener hanya menerima data yang sudah diproses. Hasil akhirnya: UI selalu mendapatkan nilai yang sudah dimodifikasi dan tidak pernah menerima error mentah dari stream.
+
+
+**Hasil**
+![alt text](img/3.gif)
+
+---
+
