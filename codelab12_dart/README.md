@@ -432,4 +432,62 @@ class _StreamHomePageState extends State<StreamHomePage> {
 ---
 
 # Praktikum 5: Multiple stream subscriptions
+## Langkah 1-3
+`main.dart`
+```dart
+  late StreamSubscription subscription2;
+  String values = '';
+...
+    subscription = stream.listen((event) {
+      setState(() {
+        values += '$event ';
+      });
+    });
+    subscription2 = stream.listen((event) {
+      setState(() {
+        values += '$event - ';
+      });
+    });
+    subscription.onDone(() {
+      print("onDone was closed");
+    });
+    super.initState();
+  }
+```
+
+**Hasil**
+![alt text](img/5-er.png)
+
+**Soal 10**
+Error itu muncul karena satu stream yang sama didengar oleh dua listener berbeda, sementara stream yang dipakai adalah single-subscription stream (default di Dart).
+
+Single-subscription stream hanya boleh punya satu pendengar.
+Ketika listener kedua (`subscription2`) mencoba mendengarkan stream yang sama, Flutter langsung melempar error karena stream itu sudah “dikunci” untuk listener pertama.
+
+## Langkah 4-6
+`main.dart`
+```dart
+  void initState() {
+    numberStream = NumberStream();
+    numberStreamController = numberStream.controller;
+    Stream stream = numberStreamController.stream.asBroadcastStream();
+    subscription = stream.listen((event) {
+...
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      ...
+          children: [
+            Text(values),
+```
+
+**Hasil**
+![alt text](img/5.gif)
+
+**Soal 11**
+
+Hal itu terjadi karena stream yang semula hanya bisa didengarkan satu kali kini diubah menjadi broadcast stream. Setelah menjadi broadcast, kedua listener yang kamu pasang menerima event yang sama secara bersamaan. Setiap angka baru yang dikirim stream langsung diproses dua kali, sehingga teks pada layar juga bertambah dua kali setiap kali tombol ditekan.
+
+---
 
