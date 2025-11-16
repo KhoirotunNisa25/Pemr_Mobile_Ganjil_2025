@@ -345,3 +345,91 @@ Langkah 1–3 menambahkan sebuah `StreamTransformer` sebagai perantara sebelum d
 
 ---
 
+# Praktikum 4: Subscribe ke stream events
+## Langkah 1-10
+`main.dart`
+```dart
+...
+
+class _StreamHomePageState extends State<StreamHomePage> {
+...
+  late StreamSubscription subscription;
+
+...
+
+  void addRandomNumber() {
+    Random random = Random();
+    int myNum = random.nextInt(10);
+
+    if (!numberStreamController.isClosed) {
+      numberStream.addNumberToSink(myNum);
+    } else {
+      setState(() {
+        lastNumber = -1;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    numberStream = NumberStream();
+    numberStreamController = numberStream.controller;
+    Stream stream = numberStreamController.stream;
+    subscription = stream.listen((event) {
+      setState(() {
+        lastNumber = event;
+      });
+    });
+    subscription.onError((error) {
+      setState(() {
+        lastNumber = -1;
+      });
+    });
+    subscription.onDone(() {
+      print("onDone was closed");
+    });
+    super.initState();
+  }
+
+  void stopStream() {
+    numberStreamController.close();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    numberStreamController.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      ...
+            ElevatedButton(
+              onPressed: () => stopStream(),
+              child: const Text('Stop Subscription'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+**Soal 9**
+- Langkah 2 membuat listener stream disimpan dalam subscription, sehingga aliran data bisa dikontrol dan tetap memperbarui UI setiap ada angka masuk.
+- Langkah 6 membatalkan subscription saat widget dibuang, supaya listener berhenti dan tidak memicu event setelah UI sudah tidak aktif.
+- Langkah 8 memastikan stream masih terbuka sebelum mengirim angka. Jika stream sudah ditutup, UI hanya menampilkan -1 agar tidak terjadi error pengiriman data.
+
+**Hasil**
+![alt text](img/4.gif)
+
+**Console**
+![alt text](img/4.png)
+
+---
+
+# Praktikum 5: Multiple stream subscriptions
+
