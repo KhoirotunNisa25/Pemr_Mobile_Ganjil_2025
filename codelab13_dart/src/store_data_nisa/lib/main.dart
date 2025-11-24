@@ -74,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return ListTile(
             title: Text(myPizzas[index].pizzaName),
             subtitle: Text(myPizzas[index].description),
+            trailing: Text('\$${myPizzas[index].price.toStringAsFixed(2)}'),
           );
         },
       ),

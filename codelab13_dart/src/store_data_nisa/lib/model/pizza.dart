@@ -1,3 +1,18 @@
+const String keyId = 'id';
+const String keyName = 'pizzaName';
+const String keyDescription = 'description';
+const String keyPrice = 'price';
+const String keyImage = 'imageUrl';
+// small helpers to keep parsing logic DRY and consistent
+String _nonEmptyString(dynamic v, String fallback) {
+  final s = v?.toString() ?? '';
+  return s.trim().isEmpty ? fallback : s;
+}
+
+int _parseInt(dynamic v) => int.tryParse(v?.toString() ?? '') ?? 0;
+
+double _parseDouble(dynamic v) => double.tryParse(v?.toString() ?? '') ?? 0.0;
+
 class Pizza {
   final int id;
   final String pizzaName;
@@ -14,52 +29,22 @@ class Pizza {
   });
 
   factory Pizza.fromJson(Map<String, dynamic> json) {
-    final id = int.tryParse(json['id']?.toString() ?? '') ?? 0;
-
-    final rawName = json['pizzaName']?.toString() ?? '';
-    final pizzaName = rawName.trim().isEmpty ? 'No name' : rawName;
-
-    final rawDescription = json['description']?.toString() ?? '';
-    final description = rawDescription.trim().isEmpty ? 'No description' : rawDescription;
-
-    final price = double.tryParse(json['price']?.toString() ?? '') ?? 0.0;
-
-    final imageUrl = json['imageUrl']?.toString() ?? '';
-
     return Pizza(
-      id: id,
-      pizzaName: pizzaName,
-      description: description,
-      price: price,
-      imageUrl: imageUrl,
-    );
-  }
-
-  factory Pizza.fromJsonSafe(Map<String, dynamic> json) {
-    final id = int.tryParse(json['id']?.toString() ?? '') ?? 0;
-    final rawName = json['pizzaName']?.toString() ?? '';
-    final pizzaName = rawName.trim().isEmpty ? 'No name' : rawName;
-    final rawDescription = json['description']?.toString() ?? '';
-    final description = rawDescription.trim().isEmpty ? 'No description' : rawDescription;
-    final price = double.tryParse(json['price']?.toString() ?? '') ?? 0.0;
-    final imageUrl = json['imageUrl']?.toString() ?? '';
-
-    return Pizza(
-      id: id,
-      pizzaName: pizzaName,
-      description: description,
-      price: price,
-      imageUrl: imageUrl,
+      id: _parseInt(json[keyId]),
+      pizzaName: _nonEmptyString(json[keyName], 'No name'),
+      description: _nonEmptyString(json[keyDescription], 'No description'),
+      price: _parseDouble(json[keyPrice]),
+      imageUrl: json[keyImage]?.toString() ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'pizzaName': pizzaName,
-      'description': description,
-      'price': price,
-      'imageUrl': imageUrl,
+      keyId: id,
+      keyName: pizzaName,
+      keyDescription: description,
+      keyPrice: price,
+      keyImage: imageUrl,
     };
   }
 }

@@ -1,7 +1,7 @@
 [ 
     { 
       "id": 1, 
-      "pizzaName": "", 
+      "pizzaName": "Margherita", 
       "description": "Pizza with tomato, fresh mozzarella and basil",
       "price": 8.75, 
       "imageUrl": "images/margherita.png" 
@@ -9,7 +9,7 @@
     { 
       "id": 2, 
       "pizzaName": "Marinara", 
-      "description": "",
+      "description": "Pizza with tomato, fresh garlic, oregano and olive oil",
       "price": 7.50, 
       "imageUrl": "images/marinara.png"  
     }, 

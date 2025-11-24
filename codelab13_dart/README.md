@@ -299,3 +299,73 @@ class Pizza {
 1. Capture hasil running aplikasi Anda, kemudian impor ke laporan praktikum Anda!
 2. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 4".
 
+---
+
+# Praktikum 3: Menangani error JSON
+
+`pizza.dart`
+```dart
+const String keyId = 'id';
+const String keyName = 'pizzaName';
+const String keyDescription = 'description';
+const String keyPrice = 'price';
+const String keyImage = 'imageUrl';
+// small helpers to keep parsing logic DRY and consistent
+String _nonEmptyString(dynamic v, String fallback) {
+  final s = v?.toString() ?? '';
+  return s.trim().isEmpty ? fallback : s;
+}
+
+int _parseInt(dynamic v) => int.tryParse(v?.toString() ?? '') ?? 0;
+
+double _parseDouble(dynamic v) => double.tryParse(v?.toString() ?? '') ?? 0.0;
+
+class Pizza {
+  final int id;
+  final String pizzaName;
+  final String description;
+  final double price;
+  final String imageUrl;
+
+  Pizza({
+    required this.id,
+    required this.pizzaName,
+    required this.description,
+    required this.price,
+    required this.imageUrl,
+  });
+
+  factory Pizza.fromJson(Map<String, dynamic> json) {
+    return Pizza(
+      id: _parseInt(json[keyId]),
+      pizzaName: _nonEmptyString(json[keyName], 'No name'),
+      description: _nonEmptyString(json[keyDescription], 'No description'),
+      price: _parseDouble(json[keyPrice]),
+      imageUrl: json[keyImage]?.toString() ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      keyId: id,
+      keyName: pizzaName,
+      keyDescription: description,
+      keyPrice: price,
+      keyImage: imageUrl,
+    };
+  }
+}
+```
+
+**Hasil**
+
+![alt text](img/3-1.png)
+
+**Soal 5**
+1. Jelaskan maksud kode lebih safe dan maintainable!
+
+    Kode lebih aman dan mudah dipelihara karena memakai konstanta kunci JSON dan helper parsing yang memastikan tipe dan nilai default, sehingga mengurangi error runtime dan mempermudah refactor.
+
+2. Capture hasil praktikum Anda dan lampirkan di README.
+3. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 5".
+
