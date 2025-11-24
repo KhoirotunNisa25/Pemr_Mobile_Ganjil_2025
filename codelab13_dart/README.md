@@ -734,6 +734,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 **Hasil**
 
+![alt text](img/7.gif)
+
 **Soal 9**
 1. Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 2. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 9".
