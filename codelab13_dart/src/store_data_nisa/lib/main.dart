@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'model/pizza.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -41,11 +42,17 @@ class _MyHomePageState extends State<MyHomePage> {
   int appCounter = 0;
   String documentsPath = '';
   String tempPath = '';
+  late File myFile;
+  String fileText = '';
 
   @override
   void initState() {
     super.initState();
-    getPaths();
+    getPaths().then((_) {
+      // initialize file in documents directory and write initial content
+      myFile = File('$documentsPath/pizzas.txt');
+      writeFile();
+    });
   }
 
   Future readAndWritePreference() async {
@@ -75,6 +82,28 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<bool> writeFile() async {
+    try {
+      // replace with your full name and NIM
+      await myFile.writeAsString('Khoirotun Nisa, 2341720057');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> readFile() async {
+    try {
+      String fileContent = await myFile.readAsString();
+      setState(() {
+        fileText = fileContent;
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<List<Pizza>> readJsonFile() async {
     String myString = await DefaultAssetBundle.of(
       context,
@@ -102,7 +131,14 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text('Doc path: $documentsPath'),
-          Text('Temp path $tempPath'),
+            Text('Temp path $tempPath'),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              child: const Text('Read File'),
+              onPressed: () => readFile(),
+            ),
+            const SizedBox(height: 8),
+            Text(fileText),
         ],
       ),
     );

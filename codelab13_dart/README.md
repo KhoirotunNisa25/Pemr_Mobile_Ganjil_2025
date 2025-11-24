@@ -572,3 +572,83 @@ class _MyHomePageState extends State<MyHomePage> {
 2. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 7".
 
 
+---
+
+# Praktikum 6: Akses filesystem dengan direktori
+
+## Langkah 1-6
+`main.dart`
+```dart
+
+class _MyHomePageState extends State<MyHomePage> {
+  List<Pizza> myPizzas = [];
+  int appCounter = 0;
+  String documentsPath = '';
+  String tempPath = '';
+  late File myFile;
+  String fileText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getPaths().then((_) {
+      // initialize file in documents directory and write initial content
+      myFile = File('$documentsPath/pizzas.txt');
+      writeFile();
+    });
+  }
+...
+  Future<bool> writeFile() async {
+    try {
+      // replace with your full name and NIM
+      await myFile.writeAsString('Khoirotun Nisa, 2341720057');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> readFile() async {
+    try {
+      String fileContent = await myFile.readAsString();
+      setState(() {
+        fileText = fileContent;
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+...
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Path Provider')),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('Doc path: $documentsPath'),
+            Text('Temp path $tempPath'),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              child: const Text('Read File'),
+              onPressed: () => readFile(),
+            ),
+            const SizedBox(height: 8),
+            Text(fileText),
+        ],
+      ),
+    );
+```
+
+**Hasil**
+
+![alt text](img/6.gif)
+
+**Soal 8**
+Jelaskan maksud kode pada langkah 3 dan 7 !
+
+Kode ini membuat fungsi asinkron bernama `writeFile()` yang bertujuan untuk menyimpan data (string) ke dalam sebuah file di sistem penyimpanan perangkat.
+`await myFile.writeAsString(...):` adalah inti dari fungsi. Ia mengambil string yang sudah ditentukan ('Margherita, Capricciosa, Napoli') dan menulisnya ke objek myFile yang sudah diinisialisasi untuk menunjuk ke lokasi file tertentu. Karena operasi I/O (Input/Output) ke sistem file bersifat lambat (asinkron), maka digunakan await.
+`try/catch:` Digunakan untuk penanganan kesalahan (error handling). Jika proses penulisan file berhasil, fungsi mengembalikan true. Jika terjadi kegagalan (misalnya, izin akses ditolak), fungsi akan menangkap kesalahan dan mengembalikan false.
+
