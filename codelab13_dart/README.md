@@ -375,9 +375,9 @@ class Pizza {
 
 ## Langkah 1-12
 
-![alt text](image.png)
+![alt text](img/image1.png)
 
-![alt text](image-1.png)
+![alt text](img/image-1.png)
 
 `main.dart`
 ```dart
@@ -494,4 +494,81 @@ class _MyHomePageState extends State<MyHomePage> {
 **Soal 6**
 1. Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 2. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 6
+
+---
+
+# Praktikum 5: Akses filesystem dengan path_provider
+
+## Langkah 1-7
+
+Path_provider
+
+![alt text](img/image-2.png)
+
+`main.dart`
+```dart
+class _MyHomePageState extends State<MyHomePage> {
+  List<Pizza> myPizzas = [];
+  int appCounter = 0;
+  String documentsPath = '';
+  String tempPath = '';
+  
+  @override
+  void initState() {
+...
+    readAndWritePreference();
+    getPaths();
+  }
+...
+  Future getPaths() async {
+    final docDir = await getApplicationDocumentsDirectory();
+    final tempDir = await getTemporaryDirectory();
+    setState(() {
+      documentsPath = docDir.path;
+      tempPath = tempDir.path;
+    });
+  }
+...
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('JSON Nisa')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Doc path: $documentsPath'),
+            const SizedBox(height: 8),
+            Text('Temp path: $temxpPath'),
+            const SizedBox(height: 24),
+            Text(
+              'You have opened the app $appCounter times.',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () {
+                deletePreference();
+              },
+              child: const Text('Reset counter'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+**Hasil**
+
+![alt text](img/5.png)
+
+**Soal 7**
+1. Capture hasil praktikum Anda dan lampirkan di README.
+2. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 7".
+
 
