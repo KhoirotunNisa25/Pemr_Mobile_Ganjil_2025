@@ -652,3 +652,88 @@ Kode ini membuat fungsi asinkron bernama `writeFile()` yang bertujuan untuk meny
 `await myFile.writeAsString(...):` adalah inti dari fungsi. Ia mengambil string yang sudah ditentukan ('Margherita, Capricciosa, Napoli') dan menulisnya ke objek myFile yang sudah diinisialisasi untuk menunjuk ke lokasi file tertentu. Karena operasi I/O (Input/Output) ke sistem file bersifat lambat (asinkron), maka digunakan await.
 `try/catch:` Digunakan untuk penanganan kesalahan (error handling). Jika proses penulisan file berhasil, fungsi mengembalikan true. Jika terjadi kegagalan (misalnya, izin akses ditolak), fungsi akan menangkap kesalahan dan mengembalikan false.
 
+---
+
+# Praktikum 7: Menyimpan data dengan enkripsi/dekripsi
+
+flutter secure storage
+
+![alt text](img/7-1.png)
+
+`main.dart`
+```dart
+class _MyHomePageState extends State<MyHomePage> {
+...
+  // Secure storage controller and variables
+  final pwdController = TextEditingController();
+  String myPass = '';
+  final storage = const FlutterSecureStorage();
+  final myKey = 'myPass';
+...
+  Future writeToSecureStorage() async {
+    await storage.write(key: myKey, value: pwdController.text);
+  }
+
+  Future<String> readFromSecureStorage() async {
+    String? secret = await storage.read(key: myKey);
+    return secret ?? '';
+  }
+
+  @override
+  void dispose() {
+    pwdController.dispose();
+    super.dispose();
+  }
+...
+    return Scaffold(
+      appBar: AppBar(title: const Text('Path Provider')),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('Doc path: $documentsPath'),
+          Text('Temp path $tempPath'),
+          const SizedBox(height: 8),
+          // Secure storage UI
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
+              controller: pwdController,
+              decoration: const InputDecoration(labelText: 'Enter secret'),
+              obscureText: true,
+            ),
+          ),
+          ElevatedButton(
+            child: const Text('Save Value'),
+            onPressed: () {
+              writeToSecureStorage();
+            },
+          ),
+          ElevatedButton(
+            child: const Text('Read Value'),
+            onPressed: () {
+              readFromSecureStorage().then((value) {
+                setState(() {
+                  myPass = value;
+                });
+              });
+            },
+          ),
+          Text('Read secure: $myPass'),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            child: const Text('Read File'),
+            onPressed: () => readFile(),
+          ),
+          const SizedBox(height: 8),
+          Text(fileText),
+        ],
+      ),
+    );
+  }
+```
+
+**Hasil**
+
+**Soal 9**
+1. Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+2. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 9".

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'model/pizza.dart';
 import 'dart:io';
 
@@ -44,6 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
   String tempPath = '';
   late File myFile;
   String fileText = '';
+  // Secure storage controller and variables
+  final pwdController = TextEditingController();
+  String myPass = '';
+  final storage = const FlutterSecureStorage();
+  final myKey = 'myPass';
 
   @override
   void initState() {
@@ -104,6 +110,21 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future writeToSecureStorage() async {
+    await storage.write(key: myKey, value: pwdController.text);
+  }
+
+  Future<String> readFromSecureStorage() async {
+    String? secret = await storage.read(key: myKey);
+    return secret ?? '';
+  }
+
+  @override
+  void dispose() {
+    pwdController.dispose();
+    super.dispose();
+  }
+
   Future<List<Pizza>> readJsonFile() async {
     String myString = await DefaultAssetBundle.of(
       context,
@@ -131,14 +152,41 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text('Doc path: $documentsPath'),
-            Text('Temp path $tempPath'),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              child: const Text('Read File'),
-              onPressed: () => readFile(),
+          Text('Temp path $tempPath'),
+          const SizedBox(height: 8),
+          // Secure storage UI
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
+              controller: pwdController,
+              decoration: const InputDecoration(labelText: 'Enter secret'),
+              obscureText: true,
             ),
-            const SizedBox(height: 8),
-            Text(fileText),
+          ),
+          ElevatedButton(
+            child: const Text('Save Value'),
+            onPressed: () {
+              writeToSecureStorage();
+            },
+          ),
+          ElevatedButton(
+            child: const Text('Read Value'),
+            onPressed: () {
+              readFromSecureStorage().then((value) {
+                setState(() {
+                  myPass = value;
+                });
+              });
+            },
+          ),
+          Text('Read secure: $myPass'),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            child: const Text('Read File'),
+            onPressed: () => readFile(),
+          ),
+          const SizedBox(height: 8),
+          Text(fileText),
         ],
       ),
     );
