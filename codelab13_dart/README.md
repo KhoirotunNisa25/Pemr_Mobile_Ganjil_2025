@@ -369,3 +369,129 @@ class Pizza {
 2. Capture hasil praktikum Anda dan lampirkan di README.
 3. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 5".
 
+---
+
+# Praktikum 4: Shared Preferences
+
+## Langkah 1-12
+
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+`main.dart`
+```dart
+class _MyHomePageState extends State<MyHomePage> {
+  List<Pizza> myPizzas = [];
+  int appCounter = 0;
+  
+  @override
+  void initState() {
+    super.initState();
+    readJsonFile().then((value) {
+      setState(() {
+        myPizzas = value;
+      });
+    });
+    readAndWritePreference();
+  }
+  
+  Future readAndWritePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    appCounter = prefs.getInt('appCounter') ?? 0;
+    appCounter++;
+    await prefs.setInt('appCounter', appCounter);
+    setState(() {
+      appCounter = appCounter;
+    });
+  }
+
+  Future<List<Pizza>> readJsonFile() async {
+    String myString = await DefaultAssetBundle.of(context)
+        .loadString('assets/pizzalist.json');
+    List pizzaMapList = jsonDecode(myString);
+    List<Pizza> myPizzas = [];
+    for (var pizza in pizzaMapList) {
+      Pizza myPizza = Pizza.fromJson(pizza);
+      myPizzas.add(myPizza);
+    }
+    String json = convertToJson(myPizzas);
+    print(json);
+    return myPizzas;
+  }
+
+  String convertToJson(List<Pizza> pizzas) {
+    return jsonEncode(pizzas.map((pizza) => pizza.toJson()).toList());
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('JSON Nisa')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              'You have opened the app $appCounter times.',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setInt('appCounter', 0);
+                setState(() {
+                  appCounter = 0;
+                });
+              },
+              child: const Text('Reset counter'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+**Hasil**
+
+![alt text](img/4-1.png)
+
+## Langkah 13-14
+
+`main.dart`
+```dart
+...
+  Future readAndWritePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    appCounter = prefs.getInt('appCounter') ?? 0;
+    appCounter++;
+    await prefs.setInt('appCounter', appCounter);
+    setState(() {
+      appCounter = appCounter;
+    });
+  }
+
+  Future deletePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    setState(() {
+      appCounter = 0;
+    });
+  }
+...
+            ElevatedButton(
+              onPressed: () {
+                deletePreference();
+              },
+...
+```
+
+**Hasil**
+
+![alt text](img/4.gif)
+
+**Soal 6**
+1. Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+2. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 6
+
