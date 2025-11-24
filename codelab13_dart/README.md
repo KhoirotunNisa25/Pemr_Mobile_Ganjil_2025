@@ -231,3 +231,71 @@ class Pizza {
 **Debug console**
 ![alt text](img/1-5.png)
 
+
+---
+
+# Praktikum 2: Handle kompatibilitas data JSON
+
+## Langkah 1-9
+
+`lib/model/pizza.dart`
+```dart
+class Pizza {
+...
+
+  factory Pizza.fromJsonSafe(Map<String, dynamic> json) {
+    final id = int.tryParse(json['id']?.toString() ?? '') ?? 0;
+    final pizzaName = json['pizzaName']?.toString() ?? '';
+    final description = json['description']?.toString() ?? '';
+    final price = double.tryParse(json['price']?.toString() ?? '') ?? 0.0;
+    final imageUrl = json['imageUrl']?.toString() ?? '';
+
+    return Pizza(
+      id: id,
+      pizzaName: pizzaName,
+      description: description,
+      price: price,
+      imageUrl: imageUrl,
+    );
+  }
+```
+
+**Hasil**
+
+![alt text](img/2-1.png)
+
+## Langkah 10
+
+`lib/model/pizza.dart`
+```dart
+class Pizza {
+...
+  factory Pizza.fromJson(Map<String, dynamic> json) {
+    final id = int.tryParse(json['id']?.toString() ?? '') ?? 0;
+    final pizzaName = json['pizzaName'] != null
+        ? json['pizzaName'].toString()
+        : 'No name';
+    final description = json['description'] != null
+        ? json['description'].toString()
+        : '';
+    final price = double.tryParse(json['price']?.toString() ?? '') ?? 0.0;
+    final imageUrl = json['imageUrl']?.toString() ?? '';
+
+    return Pizza(
+      id: id,
+      pizzaName: pizzaName,
+      description: description,
+      price: price,
+      imageUrl: imageUrl,
+    );
+  }
+```
+
+**Hasil**
+
+![alt text](img/2-2.png)
+
+**Soal 4**
+1. Capture hasil running aplikasi Anda, kemudian impor ke laporan praktikum Anda!
+2. Lalu lakukan commit dengan pesan "W13: Jawaban Soal 4".
+
