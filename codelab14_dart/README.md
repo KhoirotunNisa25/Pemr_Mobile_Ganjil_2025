@@ -332,3 +332,39 @@ floatingActionButton: FloatingActionButton(
 ![alt text](Screenshot_2025-12-01-13-55-14-877_com.example.store_data_nisa.jpg)
 
 2. Capture hasil aplikasi Anda berupa GIF di README dan lakukan commit hasil jawaban Soal 3 dengan pesan "W14: Jawaban Soal 3"
+
+---
+
+# Praktikum 4: Menghapus Data dari Web Service
+
+## `httphelper.dart`
+```dart
+  Future<String> deletePizza(int id) async {
+    const deletePath = '/pizza';
+    Uri url = Uri.https(authority, deletePath);
+    http.Response r = await http.delete(url);
+    return r.body;
+  }
+```
+
+## `main.dart`
+```dart
+Di file main.dart, di metode build dari kelas _MyHomePageState, refactor itemBuilder dari ListView.builder sehingga ListTile terkandung dalam widget Dismissible, sebagai berikut:
+return ListView.builder(
+    itemCount: (pizzas.data == null) ? 0 : pizzas.data.length,
+    itemBuilder: (BuildContext context, int position) {
+        return Dismissible(
+                    key: Key(position.toString()),
+                    onDismissed: (item) {
+                      HttpHelper helper = HttpHelper();
+                      pizzas.data!.removeWhere(
+                          (element) => element.id == pizzas.data![position].id);
+                      helper.deletePizza(pizzas.data![position].id!);
+                    },
+                    child: ListTile(...
+```
+
+## Hasil
+
+![alt text](img/4.gif)
+
