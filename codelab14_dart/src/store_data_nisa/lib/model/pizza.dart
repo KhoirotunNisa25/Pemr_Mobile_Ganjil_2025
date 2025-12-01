@@ -3,6 +3,7 @@ const String keyName = 'pizzaName';
 const String keyDescription = 'description';
 const String keyPrice = 'price';
 const String keyImage = 'imageUrl';
+const String keyCategory = 'category';
 // small helpers to keep parsing logic DRY and consistent
 String _nonEmptyString(dynamic v, String fallback) {
   final s = v?.toString() ?? '';
@@ -19,6 +20,7 @@ class Pizza {
   final String description;
   final double price;
   final String imageUrl;
+  final String category;
 
   Pizza({
     required this.id,
@@ -26,6 +28,7 @@ class Pizza {
     required this.description,
     required this.price,
     required this.imageUrl,
+    required this.category,
   });
 
   factory Pizza.fromJson(Map<String, dynamic> json) {
@@ -35,6 +38,7 @@ class Pizza {
       description: _nonEmptyString(json[keyDescription], 'No description'),
       price: _parseDouble(json[keyPrice]),
       imageUrl: json[keyImage]?.toString() ?? '',
+      category: json[keyCategory]?.toString() ?? '',
     );
   }
 
@@ -45,6 +49,7 @@ class Pizza {
       keyDescription: description,
       keyPrice: price,
       keyImage: imageUrl,
+      keyCategory: category,
     };
   }
 }

@@ -26,4 +26,19 @@ class HttpHelper {
       return [];
     }
   }
+
+  Future<String> postPizza(Pizza pizza) async {
+    const postPath = '/pizza';
+    String post = json.encode(pizza.toJson());
+    Uri url = Uri.https(authority, postPath);
+    final http.Response r = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: post,
+    );
+    if (r.statusCode == HttpStatus.ok || r.statusCode == HttpStatus.created) {
+      return r.body;
+    }
+    return 'Error ${r.statusCode}: ${r.body}';
+  }
 }
