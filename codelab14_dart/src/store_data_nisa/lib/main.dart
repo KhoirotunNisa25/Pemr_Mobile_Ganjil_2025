@@ -175,17 +175,40 @@ class _MyHomePageState extends State<MyHomePage> {
                       ' - € ' +
                       snapshot.data![position].price.toString(),
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PizzaDetailScreen(
+                        pizza: snapshot.data![position],
+                        isNew: false,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const PizzaDetailScreen()),
+            MaterialPageRoute(
+              builder: (context) => PizzaDetailScreen(
+                    pizza: Pizza(
+                      id: 0,
+                      pizzaName: '',
+                      description: '',
+                      price: 0.0,
+                      imageUrl: '',
+                      category: '',
+                    ),
+                    isNew: true,
+                  ),
+            ),
           );
         },
       ),

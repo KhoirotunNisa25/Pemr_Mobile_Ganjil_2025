@@ -243,3 +243,92 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
 ![alt text](img/2hh.jpg)
 
 2. Capture hasil aplikasi Anda berupa GIF di README dan lakukan commit hasil jawaban Soal 2 dengan pesan "W14: Jawaban Soal 2"
+
+---
+
+# Praktikum 3: Memperbarui Data di Web Service (PUT)
+
+## Mock API
+
+![alt text](img/3.png)
+
+## `httphelper.dart`
+```dart
+  Future<String> putPizza(Pizza pizza) async {
+    const putPath = '/pizza';
+    String put = json.encode(pizza.toJson());
+    Uri url = Uri.https(authority, putPath);
+    http.Response r = await http.put(url, body: put);
+    return r.body;
+  }
+```
+
+## `pizza_detail.dart`
+```dart
+  final Pizza pizza;
+  final bool isNew;
+  const PizzaDetailScreen({super.key, required this.pizza, required this.isNew});
+...
+@override
+void initState() {
+  if (!widget.isNew) {
+    txtId.text = widget.pizza.id.toString();
+    txtName.text = widget.pizza.pizzaName;
+    txtDescription.text = widget.pizza.description;
+    txtPrice.text = widget.pizza.price.toString();
+    txtImageUrl.text = widget.pizza.imageUrl;
+  }
+  super.initState();
+}
+Future savePizza() async {
+...
+    final result = await (widget.isNew
+  ? helper.postPizza(pizza)
+  : helper.putPizza(pizza));    
+  setState(() {
+      operationResult = result;
+    });
+  }
+..
+```
+
+## `main.dart`
+```dart
+return ListTile(
+    title: Text(pizzas.data![position].pizzaName),
+    subtitle: Text(pizzas.data![position].description +
+                  ' - € ' +
+                  pizzas.data![position].price.toString()),
+    onTap: () {
+       Navigator.push(
+          context,
+          MaterialPageRoute(
+             builder: (context) => PizzaDetailScreen(
+                pizza: pizzas.data![position], isNew: false)),
+    );
+    ...
+floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PizzaDetailScreen(
+                        pizza: Pizza(),
+                        isNew: true,
+                      )),            
+           );
+      }),
+);
+```
+
+## Hasil
+
+![alt text](img/3h.jpg)
+
+## Soal 3
+1. Ubah salah satu data dengan Nama dan NIM Anda, lalu perhatikan hasilnya di Wiremock.
+
+![alt text](Screenshot_2025-12-01-13-55-14-877_com.example.store_data_nisa.jpg)
+
+2. Capture hasil aplikasi Anda berupa GIF di README dan lakukan commit hasil jawaban Soal 3 dengan pesan "W14: Jawaban Soal 3"
