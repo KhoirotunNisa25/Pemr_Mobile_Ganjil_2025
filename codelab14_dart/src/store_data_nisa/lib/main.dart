@@ -159,13 +159,10 @@ class _MyHomePageState extends State<MyHomePage> {
         future: callPizzas(),
         builder: (BuildContext context, AsyncSnapshot<List<Pizza>> snapshot) {
           if (snapshot.hasError) {
-            // Show the real error message to help debugging
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
+            return const Text('Something went wrong');
           }
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return const CircularProgressIndicator();
           }
           return ListView.builder(
             itemCount: (snapshot.data == null) ? 0 : snapshot.data!.length,
