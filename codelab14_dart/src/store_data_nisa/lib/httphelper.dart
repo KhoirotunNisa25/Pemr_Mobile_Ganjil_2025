@@ -9,8 +9,8 @@ class HttpHelper {
   factory HttpHelper() {
     return _httpHelper;
   }
-  final String authority = 'https://q62vz.wiremockapi.cloud/';
-  final String path = 'pizzalist';
+  final String authority = 'q62vz.wiremockapi.cloud';
+  final String path = '/pizzalist';
   Future<List<Pizza>> getPizzaList() async {
     final Uri url = Uri.https(authority, path);
     final http.Response result = await http.get(url);
